@@ -1,0 +1,61 @@
+添加hosts，加快下载速度
+	140.82.113.4 github.com
+	199.232.69.194 github.global.ssl.fastly.net
+
+Step 1： 更新包
+	sudo apt-get update
+	sudo apt-get upgrade
+
+Step 2： 安装依赖项
+	sudo apt-get remove x264 libx264-dev
+	sudo apt-get install build-essential checkinstall cmake pkg-config yasm
+	sudo apt-get install git gfortran
+	sudo apt-get install libjpeg8-dev libjasper-dev libpng12-dev
+	sudo apt-get install libtiff5-dev
+	sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
+	sudo apt-get install libxine2-dev libv4l-dev
+	sudo apt-get install libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+	sudo apt-get install qt5-default libgtk2.0-dev libtbb-dev
+	sudo apt-get install libatlas-base-dev
+	sudo apt-get install libfaac-dev libmp3lame-dev libtheora-dev
+	sudo apt-get install libvorbis-dev libxvidcore-dev
+	sudo apt-get install libopencore-amrnb-dev libopencore-amrwb-dev
+	sudo apt-get install x264 v4l-utils
+
+# Optional dependencies
+	sudo apt-get install libprotobuf-dev protobuf-compiler
+	sudo apt-get install libgoogle-glog-dev libgflags-dev
+	sudo apt-get install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
+
+下载opencv库和opencv_contrib库，并放到同一目录下
+	git clone https://github.com/opencv/opencv.git
+	git clone https://github.com/opencv/opencv_contrib.git
+
+进入他们各自的根目录切换到4.1.1分支: 
+	cd opencv
+	git checkout 4.1.1
+	cd opencv_contrib
+	git checkout 4.1.1
+
+进入opencv目录下：mkdir build && cd build
+
+执行cmake命令(不要忘记后边的两个点): 
+cmake -D CMAKE_INSTALL_PREFIX=/usr/local \
+      -D CMAKE_BUILD_TYPE=Release \
+      -D WITH_CUDA=ON \
+      -D WITH_TBB=ON \
+      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
+
+下面是可能遇到的问题：
+问题：opencv/modules/core/include/opencv2/core/private.hpp:66:12: fatal error: Eigen/Core: No such file or directory
+	#  include <Eigen/Core>
+解决办法：https://blog.csdn.net/dulingwen/article/details/105727583
+
+
+问题：/boostdesc.cpp:654:20: fatal error: boostdesc_bgm.i: No such file or directory
+        #include "boostdesc_bgm.i"
+解决办法：https://blog.csdn.net/AlexWang30/article/details/99612188
+
+问题：/opencv_contrib/modules/xfeatures2d/test/test_features2d.cpp:51:10: fatal error: features2d/test/test_detectors_regression.impl.hpp: No such file or directory
+	#include "features2d/test/test_detectors_regression.impl.hpp"
+解决办法：https://blog.csdn.net/HanShu6/article/details/106269831/
